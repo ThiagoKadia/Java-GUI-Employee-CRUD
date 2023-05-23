@@ -13,7 +13,7 @@ public class MainPage {
     private JButton btnSearch;
     private JTextField txtSearchId;
     private JTextField txtName;
-    private JTextField txtPosition;
+    private JTextField txtDepartment;
     private JButton btnListAll;
     private JTextArea txtList;
     private JPanel MainPage;
@@ -31,7 +31,7 @@ public class MainPage {
     public void clearTextFields() { // this method was created to give a fresh restart to some of the MainPage's fields
         txtId.setText("");
         txtName.setText("");
-        txtPosition.setText("");
+        txtDepartment.setText("");
         txtSearchId.setText("");
     }
 
@@ -40,7 +40,7 @@ public class MainPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 txtId.setText(Integer.toString(idCounter));
-                saveEmployee(txtName.getText(), EmployeePosition.valueOf(txtPosition.getText()));
+                saveEmployee(txtName.getText(), Department.valueOf(txtDepartment.getText()));
                 clearTextFields();
             }
         });
@@ -48,7 +48,7 @@ public class MainPage {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateEmployee(Integer.parseInt(txtSearchId.getText()) - 1, txtName.getText(), EmployeePosition.valueOf(txtPosition.getText()));
+                updateEmployee(Integer.parseInt(txtSearchId.getText()) - 1, txtName.getText(), Department.valueOf(txtDepartment.getText()));
                 txtId.setText(txtSearchId.getText());
             }
         });
@@ -85,7 +85,7 @@ public class MainPage {
         try {
             String writtenEmployees = "";
             for (Employee employee : employees) {
-                writtenEmployees += "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\n\n";
+                writtenEmployees += "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nDepartment: " + employee.getDepartment() + "\n\n";
             }
             return writtenEmployees;
         }
@@ -107,7 +107,7 @@ public class MainPage {
 
     public static String getStringEmployee (Employee employee) { //this method returns a String with the attributes of one employee
         try {
-            return "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\n";
+            return "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nDepartment: " + employee.getDepartment() + "\n";
         }
         catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -115,11 +115,11 @@ public class MainPage {
         return null;
     }
 
-    public static void updateEmployee (int id, String newName, EmployeePosition newPosition) {
+    public static void updateEmployee (int id, String newName, Department newDepartment) {
         try {
             Employee auxEmployee = findEmployee(auxList, id);
             auxEmployee.setName(newName);
-            auxEmployee.setPosition(newPosition);
+            auxEmployee.setDepartment(newDepartment);
             JOptionPane.showMessageDialog(null, "Employee updated successfully", "Update Success", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception error) {
@@ -137,9 +137,9 @@ public class MainPage {
         }
     }
 
-    public static void saveEmployee (String name, EmployeePosition position) {
+    public static void saveEmployee (String name, Department department) {
         try {
-            Employee auxEmployee = new Employee(idCounter, name, position);
+            Employee auxEmployee = new Employee(idCounter, name, department);
             auxList.add(auxEmployee);
             idCounter++;
             JOptionPane.showMessageDialog(null, "Employee saved successfully", "Save Success", JOptionPane.INFORMATION_MESSAGE);

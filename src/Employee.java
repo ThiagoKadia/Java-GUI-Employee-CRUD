@@ -1,12 +1,12 @@
 public class Employee {
     private int id;
     private String name;
-    private EmployeePosition position;
+    private Department department;
 
-    Employee (int id, String name, EmployeePosition position) {
+    Employee (int id, String name, Department department) {
         this.id = id;
         this.name = name;
-        this.position = position;
+        this.department = department;
     }
 
     public int getId() {
@@ -25,11 +25,11 @@ public class Employee {
         this.name = name;
     }
 
-    public EmployeePosition getPosition() {
-        return position;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setPosition(EmployeePosition position) {
-        this.position = position;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }
