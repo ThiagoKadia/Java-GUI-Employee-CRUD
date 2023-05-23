@@ -67,7 +67,7 @@ public class MainPage {
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtList.setText(textEmployee(findEmployee(auxList, Integer.parseInt(txtSearchId.getText()) - 1)));
+                txtList.setText(getStringEmployee(findEmployee(auxList, Integer.parseInt(txtSearchId.getText()) - 1)));
                 txtId.setText(txtSearchId.getText());
             }
         });
@@ -95,7 +95,7 @@ public class MainPage {
         return null;
     }
 
-    public static Employee findEmployee (List<Employee> employees, int id) {
+    public static Employee findEmployee (List<Employee> employees, int id) { // return an employee based on a list, and it's position in the list
         try {
             return employees.get(id);
         }
@@ -105,7 +105,7 @@ public class MainPage {
         return null;
     }
 
-    public static String textEmployee (Employee employee) { //this method returns a String with the attributes of one employee
+    public static String getStringEmployee (Employee employee) { //this method returns a String with the attributes of one employee
         try {
             return "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\n";
         }
