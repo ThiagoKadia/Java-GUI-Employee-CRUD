@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
+import static java.lang.Double.parseDouble;
+
 public class MainPage {
     private JTextField txtId;
     private JButton btnSave;
@@ -13,10 +15,12 @@ public class MainPage {
     private JButton btnSearch;
     private JTextField txtSearchId;
     private JTextField txtName;
-    private JTextField txtDepartment;
     private JButton btnListAll;
     private JTextArea txtList;
     private JPanel MainPage;
+    private JTextField txtWage;
+    private JComboBox cbPosition;
+    private JComboBox cbDepartment;
     private static List<Employee> auxList = new ArrayList<>(); //this is the list which will be used in every employee manipulation
     private static Integer idCounter = 1; //the employees ID will start go from 1 and will change only under delete condition
 
@@ -31,8 +35,8 @@ public class MainPage {
     public void clearTextFields() { // this method was created to give a fresh restart to some of the MainPage's fields
         txtId.setText("");
         txtName.setText("");
-        txtDepartment.setText("");
         txtSearchId.setText("");
+        txtWage.setText("");
     }
 
     public MainPage() {
@@ -40,7 +44,7 @@ public class MainPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 txtId.setText(Integer.toString(idCounter));
-                saveEmployee(txtName.getText(), Department.valueOf(txtDepartment.getText()));
+                saveEmployee(txtName.getText(), Department.valueOf(cbDepartment.getSelectedItem().toString()), parseDouble(txtWage.getText()), cbPosition.getSelectedItem().toString());
                 clearTextFields();
             }
         });
@@ -48,7 +52,7 @@ public class MainPage {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateEmployee(Integer.parseInt(txtSearchId.getText()) - 1, txtName.getText(), Department.valueOf(txtDepartment.getText()));
+                updateEmployee(Integer.parseInt(txtSearchId.getText()) - 1, txtName.getText(), Department.valueOf(cbDepartment.getSelectedItem().toString()));
                 txtId.setText(txtSearchId.getText());
             }
         });
@@ -81,11 +85,11 @@ public class MainPage {
         });
     }
 
-    public static String buildEmployeeList(List<Employee> employees) { // this method builds a String with all employees in a list
+    private static String buildEmployeeList(List<Employee> employees) { // this method builds a String with all employees in a list
         try {
             String writtenEmployees = "";
             for (Employee employee : employees) {
-                writtenEmployees += "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nDepartment: " + employee.getDepartment() + "\n\n";
+                writtenEmployees += "ID: " + (employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\nDepartment: " + employee.getDepartment() + "\nWage: $" + employee.getWage() + "\n\n";
             }
             return writtenEmployees;
         }
@@ -95,7 +99,7 @@ public class MainPage {
         return null;
     }
 
-    public static Employee findEmployee (List<Employee> employees, int id) { // return an employee based on a list, and it's position in the list
+    private static Employee findEmployee (List<Employee> employees, int id) { // return an employee based on a list, and it's position in the list
         try {
             return employees.get(id);
         }
@@ -105,9 +109,9 @@ public class MainPage {
         return null;
     }
 
-    public static String getStringEmployee (Employee employee) { //this method returns a String with the attributes of one employee
+    private static String getStringEmployee (Employee employee) { //this method returns a String with the attributes of one employee
         try {
-            return "ID: " + Integer.toString(employee.getId()) + "\nName: " + employee.getName() + "\nDepartment: " + employee.getDepartment() + "\n";
+            return "ID: " + (employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\nDepartment: " + employee.getDepartment() + "\nWage: $" + employee.getWage();
         }
         catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -115,7 +119,7 @@ public class MainPage {
         return null;
     }
 
-    public static void updateEmployee (int id, String newName, Department newDepartment) {
+    private static void updateEmployee (int id, String newName, Department newDepartment) {
         try {
             Employee auxEmployee = findEmployee(auxList, id);
             auxEmployee.setName(newName);
@@ -127,7 +131,7 @@ public class MainPage {
         }
     }
 
-    public static void removeEmployee (int id) {
+    private static void removeEmployee (int id) {
         try {
             auxList.remove(id);
             JOptionPane.showMessageDialog(null, "Employee deleted successfully", "Delete Success", JOptionPane.INFORMATION_MESSAGE);
@@ -137,12 +141,23 @@ public class MainPage {
         }
     }
 
-    public static void saveEmployee (String name, Department department) {
+    private static void saveEmployee (String name, Department department, double wage, String position) {
         try {
-            Employee auxEmployee = new Employee(idCounter, name, department);
-            auxList.add(auxEmployee);
-            idCounter++;
-            JOptionPane.showMessageDialog(null, "Employee saved successfully", "Save Success", JOptionPane.INFORMATION_MESSAGE);
+            if (position == "Manager") {
+                Manager auxManager = new Manager(idCounter, name, department, wage, position);
+                auxList.add(auxManager);
+                idCounter++;
+                JOptionPane.showMessageDialog(null, "Employee saved successfully", "Save Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else if (position == "FullTime") {
+                FullTime auxFullTime = new FullTime(idCounter, name, department, wage, position);
+                auxList.add(auxFullTime);
+                idCounter++;
+                JOptionPane.showMessageDialog(null, "Employee saved successfully", "Save Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                throw new Exception("Invalid position. Please use Manager or FullTime.");
+            }
         }
         catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
