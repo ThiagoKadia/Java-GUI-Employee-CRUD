@@ -32,7 +32,7 @@ public class MainPage {
         frame.setVisible(true);
     }
 
-    public void clearTextFields() { // this method was created to give a fresh restart to some of the MainPage's fields
+    private void clearTextFields() { // this method was created to give a fresh restart to some of the MainPage's fields
         txtId.setText("");
         txtName.setText("");
         txtSearchId.setText("");
@@ -52,7 +52,7 @@ public class MainPage {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateEmployee(Integer.parseInt(txtSearchId.getText()) - 1, txtName.getText(), Department.valueOf(cbDepartment.getSelectedItem().toString()));
+                updateEmployee(Integer.parseInt(txtSearchId.getText()) - 1, txtName.getText(), Department.valueOf(cbDepartment.getSelectedItem().toString()), parseDouble(txtWage.getText()));
                 txtId.setText(txtSearchId.getText());
             }
         });
@@ -119,11 +119,12 @@ public class MainPage {
         return null;
     }
 
-    private static void updateEmployee (int id, String newName, Department newDepartment) {
+    private static void updateEmployee (int id, String newName, Department newDepartment, double newWage) {
         try {
             Employee auxEmployee = findEmployee(auxList, id);
             auxEmployee.setName(newName);
             auxEmployee.setDepartment(newDepartment);
+            auxEmployee.setWage(newWage);
             JOptionPane.showMessageDialog(null, "Employee updated successfully", "Update Success", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception error) {
