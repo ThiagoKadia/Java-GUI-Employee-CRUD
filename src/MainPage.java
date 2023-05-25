@@ -21,6 +21,7 @@ public class MainPage {
     private JTextField txtWage;
     private JComboBox cbPosition;
     private JComboBox cbDepartment;
+    private JButton btnIncreaseWage;
     private static List<Employee> auxList = new ArrayList<>(); //this is the list which will be used in every employee manipulation
     private static Integer idCounter = 1; //the employees ID will start go from 1 and will change only under delete condition
 
@@ -81,6 +82,16 @@ public class MainPage {
             public void actionPerformed(ActionEvent e) {
                 txtList.setText(buildEmployeeList(auxList));
                 clearTextFields();
+            }
+        });
+        btnIncreaseWage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    increaseWage(findEmployee(auxList, Integer.parseInt(txtSearchId.getText()) -1));
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
@@ -159,6 +170,15 @@ public class MainPage {
             else {
                 throw new Exception("Invalid position. Please use Manager or FullTime.");
             }
+        }
+        catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void increaseWage(Employee employee) throws Exception {
+        try {
+            employee.increaseWage();
         }
         catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

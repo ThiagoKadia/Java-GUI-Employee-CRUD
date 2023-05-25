@@ -1,4 +1,4 @@
-abstract class Employee {
+abstract class Employee implements WageInteractions {
     private int id;
     private String name;
     private Department department;
@@ -54,5 +54,11 @@ abstract class Employee {
 
     protected double getMinimumWage() {
         return 0;
+    }
+    protected double getWageAdjustment() {return 0;}
+
+    @Override
+    public void increaseWage() throws Exception {
+        setWage(getWage() + getWageAdjustment());
     }
 }
