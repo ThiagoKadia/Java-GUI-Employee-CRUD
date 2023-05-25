@@ -87,11 +87,7 @@ public class MainPage {
         btnIncreaseWage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    increaseWage(findEmployee(auxList, Integer.parseInt(txtSearchId.getText()) -1));
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+                increaseWage(Integer.parseInt(txtSearchId.getText()));
             }
         });
     }
@@ -176,9 +172,9 @@ public class MainPage {
         }
     }
 
-    private void increaseWage(Employee employee) throws Exception {
+    private void increaseWage(int id) {
         try {
-            employee.increaseWage();
+            findEmployee(auxList, id).increaseWage();
         }
         catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
