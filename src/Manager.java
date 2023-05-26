@@ -14,7 +14,6 @@ public class Manager extends Employee implements WageInteractions{
     @Override
     protected double getWageAdjustment() {return wageProgression;}
 
-    @Override
     public void increaseWage() throws Exception {
         super.increaseWage();
     }

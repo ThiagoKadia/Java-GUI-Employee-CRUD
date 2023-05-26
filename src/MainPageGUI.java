@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 
 import static java.lang.Double.parseDouble;
 
-public class MainPage {
+public class MainPageGUI {
     private JTextField txtId;
     private JButton btnSave;
     private JButton btnUpdate;
@@ -22,12 +22,13 @@ public class MainPage {
     private JComboBox cbPosition;
     private JComboBox cbDepartment;
     private JButton btnIncreaseWage;
+    private JButton btnTest;
     private static List<Employee> auxList = new ArrayList<>(); //this is the list which will be used in every employee manipulation
     private static Integer idCounter = 1; //the employees ID will start go from 1 and will change only under delete condition
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("MainPage");
-        frame.setContentPane(new MainPage().MainPage);
+        frame.setContentPane(new MainPageGUI().MainPage);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -40,7 +41,7 @@ public class MainPage {
         txtWage.setText("");
     }
 
-    public MainPage() {
+    public MainPageGUI() {
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,7 +73,7 @@ public class MainPage {
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtList.setText(getStringEmployee(findEmployee(auxList, Integer.parseInt(txtSearchId.getText()) - 1)));
+                txtList.setText(getEmployeeString(findEmployee(auxList, Integer.parseInt(txtSearchId.getText()) - 1)));
                 txtId.setText(txtSearchId.getText());
             }
         });
@@ -90,20 +91,29 @@ public class MainPage {
                 increaseWage(Integer.parseInt(txtSearchId.getText()) - 1);
             }
         });
+        btnTest.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerTestEmployees();
+            }
+        });
     }
 
     private static String buildEmployeeList(List<Employee> employees) { // this method builds a String with all employees in a list
+        StringBuilder builder = new StringBuilder();
         try {
-            String writtenEmployees = "";
             for (Employee employee : employees) {
-                writtenEmployees += "ID: " + (employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\nDepartment: " + employee.getDepartment() + "\nWage: $" + employee.getWage() + "\n\n";
+                builder.append("ID: ").append(employee.getId())
+                        .append("\nName: ").append(employee.getName())
+                        .append("\nPosition: ").append(employee.getPosition())
+                        .append("\nDepartment: ").append(employee.getDepartment())
+                        .append("\nWage: $").append(employee.getWage())
+                        .append("\n\n");
             }
-            return writtenEmployees;
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return null;
+        return builder.toString();
     }
 
     private static Employee findEmployee (List<Employee> employees, int id) { // return an employee based on a list, and it's position in the list
@@ -116,14 +126,19 @@ public class MainPage {
         return null;
     }
 
-    private static String getStringEmployee (Employee employee) { //this method returns a String with the attributes of one employee
+    private static String getEmployeeString(Employee employee) { //this method returns a String with the attributes of one employee
         try {
-            return "ID: " + (employee.getId()) + "\nName: " + employee.getName() + "\nPosition: " + employee.getPosition() + "\nDepartment: " + employee.getDepartment() + "\nWage: $" + employee.getWage();
-        }
-        catch (Exception error) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("ID: ").append(employee.getId())
+                    .append("\nName: ").append(employee.getName())
+                    .append("\nPosition: ").append(employee.getPosition())
+                    .append("\nDepartment: ").append(employee.getDepartment())
+                    .append("\nWage: $").append(employee.getWage());
+            return builder.toString();
+        } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return null;
     }
 
     private static void updateEmployee (int id, String newName, Department newDepartment, double newWage) {
@@ -151,13 +166,13 @@ public class MainPage {
 
     private static void saveEmployee (String name, Department department, double wage, String position) {
         try {
-            if (position == "Manager") {
+            if (position.equals("Manager")) { // could be (position == "Manager")
                 Manager auxManager = new Manager(idCounter, name, department, wage, position);
                 auxList.add(auxManager);
                 idCounter++;
                 JOptionPane.showMessageDialog(null, "Employee saved successfully", "Save Success", JOptionPane.INFORMATION_MESSAGE);
             }
-            else if (position == "FullTime") {
+            else if (position.equals("FullTime")) {
                 FullTime auxFullTime = new FullTime(idCounter, name, department, wage, position);
                 auxList.add(auxFullTime);
                 idCounter++;
@@ -172,9 +187,21 @@ public class MainPage {
         }
     }
 
-    private void increaseWage(int id) {
+    private static void increaseWage(int id) {
         try {
             findEmployee(auxList, id).increaseWage();
+        }
+        catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private static void registerTestEmployees() {
+        try {
+            saveEmployee("Thiago", Department.valueOf("QA"), 1850, "FullTime");
+            saveEmployee("Gustavo", Department.valueOf("Dev"), 2100, "Manager");
+            saveEmployee("Murilo", Department.valueOf("Dev"), 1600, "FullTime");
+            saveEmployee("Eduardo", Department.valueOf("QA"), 2050, "Manager");
         }
         catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
