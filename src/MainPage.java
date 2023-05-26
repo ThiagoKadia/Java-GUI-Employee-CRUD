@@ -87,7 +87,7 @@ public class MainPage {
         btnIncreaseWage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                increaseWage(Integer.parseInt(txtSearchId.getText()));
+                increaseWage(Integer.parseInt(txtSearchId.getText()) - 1);
             }
         });
     }
